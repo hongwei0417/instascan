@@ -53,12 +53,14 @@ class Camera {
   static async getCameras() {
     await this._ensureAccess();
 
+    // 確認存取權限後，重新取得裝置
     let devices = await navigator.mediaDevices.enumerateDevices();
     return devices
       .filter(d => d.kind === 'videoinput')
       .map(d => new Camera(d.deviceId, cameraName(d.label)));
   }
 
+  // 確認存取權限
   static async _ensureAccess() {
     return await this._wrapErrors(async () => {
       let access = await navigator.mediaDevices.getUserMedia({ video: true });
